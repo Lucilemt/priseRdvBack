@@ -1,0 +1,65 @@
+body {
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(
+    to left,
+    #c8deff,
+    #c3d9fb,
+    #bed4f8,
+    #bacff4,
+    #b5caf0
+  );
+  color: rgb(90, 90, 90);
+  font-family: "Montserrat", sans-serif;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+input {
+  margin: 0.4rem;
+  border-radius: 0.3rem 0.3rem 0.3rem 0.3rem;
+  border: solid 1px rgb(114, 156, 190);
+}
+
+h1 {
+  text-align: center;
+}
+
+#boutonEnvoyer {
+  color: white;
+  background-color: rgb(185, 245, 219);
+  border-radius: 0.8rem 0.8rem 0.8rem 0.8rem;
+  border-color: rgb(185, 245, 219);
+}
+#boutonEnvoyer:hover {
+  color: rgb(185, 245, 219);
+  background-color: white;
+  border-radius: 0.8rem 0.8rem 0.8rem 0.8rem;
+  border-color: rgb(185, 245, 219);
+}
+/* 
+#boutonRDV {
+  background-color: rgb(185, 245, 219);
+  border-radius: 0.8rem 0.8rem 0.8rem 0.8rem;
+  border-color: rgb(185, 245, 219);
+  margin-top: 0.3rem;
+  color: white;
+}
+
+#aRDV {
+  display: flex;
+  justify-content: center;
+  text-decoration: none;
+}
+
+#boutonRDV:hover {
+  color: rgb(185, 245, 219);
+  background-color: white;
+  border-radius: 0.8rem 0.8rem 0.8rem 0.8rem;
+  border-color: rgb(185, 245, 219);
+} */

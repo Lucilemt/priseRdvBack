@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Bootstrap -->
+    <%- include('partials/Bootstrap.ejs') %>
+    <title>User page</title>
+  </head>
+  <body>
+    <div
+      class="d-flex flex-column align-items-center justify-content-center"
+      style="height: 100vh"
+    >
+      <h1>Bonjour <%= data.username%></h1>
+      <h2>Your mail : <%= data.email%></h2>
+      <p>Voici les horaires de disponibilités:</p>
+      <ul>
+        <li>Lundi : 9h-12h & 13h-18h</li>
+        <li>Mardi : 9h-12h & 13h-18h</li>
+        <li>Mercredi : 9h-12h & 13h-18h</li>
+        <li>Jeudi : 9h-12h & 13h-18h</li>
+        <li>Vendredi : 9h-12h & 13h-18h</li>
+        <li>Samedi : 9h-12h</li>
+      </ul>
+
+      <a href="/user/<%=data.id%> ">
+        <button
+          id="boutonRDV"
+          class="btn btn-outline-dark"
+          style="padding-left: 2.5rem; padding-right: 2.5rem"
+        >
+          Voir RDV
+        </button>
+      </a>
+    </div>
+  </body>
+</html>

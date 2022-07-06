@@ -1,0 +1,25 @@
+{
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "body-parser": "^1.20.0",
+    "bootstrap": "^5.2.0-beta1",
+    "dotenv": "^16.0.1",
+    "ejs": "^3.1.8",
+    "express": "^4.18.1",
+    "luxon": "^2.4.0",
+    "method-override": "^3.0.0",
+    "mongodb": "^4.7.0",
+    "mongoose": "^6.4.1",
+    "nodemon": "^2.0.18"
+  },
+  "name": "projetrdv",
+  "version": "1.0.0",
+  "description": "app prise de RDV",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon app.js"
+  },
+  "author": "Lucile",
+  "license": "ISC"
+}

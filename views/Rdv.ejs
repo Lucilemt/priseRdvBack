@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Bootstrap -->
+    <%- include('partials/Bootstrap.ejs') %>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="/css/rdv.css" />
+    <link rel="stylesheet" href="/css/nav.css">
+    <title>Document</title>
+  </head>
+  <body>
+    <%- include('partials/Navbar.ejs')%>
+    <div class="container">
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">Nom</th>
+            <th scope="col">Prénom</th>
+            <th scope="col">Email</th>
+            <th scope="col">Date RDV</th>
+            <th scope="col">Heure RDV</th>
+          </tr>
+        </thead>
+        <%rdv.forEach((r) => { %>
+        <tbody>
+          <tr>
+            <td><%= r.lastname %></td>
+            <td><%= r.firstname %></td>
+            <td><%= r.email %></td>
+            <td><%= r.rdv_date.toLocaleDateString("fr") %></td>
+            <td><%= r.rdv_heure %></td>
+          </tr>
+        </tbody>
+        <% }); %>
+      </table>
+      <a href="/prv/<%=user._id%>"
+        ><button
+          type="submit"
+          id="boutonRDV"
+          class="btn btn-lg"
+          style="padding-left: 2.5rem; padding-right: 2.5rem"
+        >
+          Prendre RDV
+        </button></a
+      >
+
+      <div class="container" id="modif">
+        <h2 class="pt-5 pb-3">Modifier un Rendez-vous</h1>
+        <form action="/prv/edit/<%= user.email %>?_method=PUT" method="post">
+          <input type="hidden" name="_method" value="PUT" />
+
+          <label for="rdv_date">Nouvelle date de RDV</label>
+          <input type="date" id="rdv_date" name="rdv_date" min="" />
+          <br/>
+          <label class="mt-3" for="rdv_heure">Heure de RDV</label>
+          <input type="time" id="rdv_heure" name="rdv_heure" />
+          <br/>
+          <button
+            type="submit"
+            id="modifRDV"
+            class="btn btn-lg mt-3"
+            style="padding-left: 2.5rem; padding-right: 2.5rem">
+            Modifier un RDV
+          </button>
+        </form>
+      </div>
+    </div>
+    <script type="text/javascript" src="js/rdv.js"></script>
+  </body>
+</html>
