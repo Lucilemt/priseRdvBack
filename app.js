@@ -1,11 +1,18 @@
 var express = require("express");
+var app = express();
 const { MongoClient, ServerApiVersion } = require("mongodb");
 const { default: mongoose, model } = require("mongoose");
-var ObjectId = require('mongodb').ObjectId;
-
+var ObjectId = require("mongodb").ObjectId;
 const methodOverride = require("method-override");
+var cors = require("cors");
+const cookieParser = require("cookie-parser");
+app.use(cookieParser());
+
+const { createTokens, validateToken } = require("./JWT");
+console.log(validateToken);
+
 var bodyParser = require("body-parser");
-var app = express();
+app.use(cors());
 const bcrypt = require("bcrypt");
 require("dotenv").config;
 app.set("view engine", "ejs");
@@ -15,13 +22,14 @@ const path = require("path");
 const Model = require("./models/Model");
 const User = require("./models/User");
 const { format } = require("path");
+const { log } = require("console");
 require("dotenv").config();
 
 // Pour le path du dossier "public" pour y mettre CSS JS IMG
 app.use(express.static(path.join(__dirname, "public")));
 
 const url = process.env.DATABASE_URL;
-    
+
 const connectionParams = {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -34,20 +42,21 @@ mongoose
   })
   .catch((err) => console.log(err));
 
-app.get("/", function (req, res) {
+app.get("/", validateToken, function (req, res) {
   Model.find()
     .then((data) => {
-      res.render("Home", { data: data });
+      res.json(data);
     })
     .catch((err) => console.log(err));
 });
 
 app.get("/rdv", function (req, res) {
-    Model.find()
-        .then((data) => {
-                res.render("Rdv", { data: data })
-        })
-        .catch((err) => console.log(err));
+  Model.find()
+    .then((data) => {
+      // res.render("Rdv", { data: data })
+      res.json(data);
+    })
+    .catch((err) => console.log(err));
 });
 
 app.post("/submit-rdv", function (req, res) {
@@ -61,7 +70,7 @@ app.post("/submit-rdv", function (req, res) {
   Data.save()
     .then(() => {
       console.log("Data saved successfully");
-      res.redirect("/");
+      res.redirect("http://localhost:3000/");
     })
     .catch((err) => console.log(err));
 });
@@ -99,38 +108,41 @@ app.post("/api/login", (req, res) => {
       }
       console.log(user);
       if (!bcrypt.compareSync(req.body.password, user.password)) {
-
         return res.status(404).send("Invalid password");
       }
-      // if(user.password != req.body.password){
-      //     return res.status(404).send('Invalid password');
-      // }
-    res.render("UserPage", { data: user });
+      const accessToken = createTokens(user);
+      console.log(accessToken);
+      res.cookie("access-token", accessToken),
+        {
+          maxAge: 60 * 60 * 24 * 30 * 1000,
+          httpOnly: true,
+        };
+      res.redirect('http://localhost:3000/profile/'+user.username);
     })
     .catch((err) => console.log(err));
 });
 
 app.get("/user/:id", (req, res) => {
-        User.findOne({
-          _id: req.params.id,
-        }) 
-        .then((dataUser) => {
-          Model.find({email : dataUser.email})
-          .then(dataRdv=>{
-            res.render("Rdv", { user: dataUser, rdv : dataRdv});
-          })
-        })
-        .catch((err) => console.log(err));
+  User.findOne({
+    _id: req.params.id,
+  })
+    .then((dataUser) => {
+      Model.find({ email: dataUser.email }).then((dataRdv) => {
+        // res.render("Rdv", { user: dataUser, rdv : dataRdv});
+        res.json(dataRdv);
+      });
+    })
+    .catch((err) => console.log(err));
 });
 
 app.get("/prv/:id", (req, res) => {
   User.findOne({
     _id: req.params.id,
-  }) 
-  .then((dataUser) => {
-      res.render("Home", { user: dataUser});
   })
-  .catch((err) => console.log(err));
+    .then((dataUser) => {
+      res.json(dataUser);
+    })
+    .catch((err) => console.log(err));
 });
 
 app.put("/prv/edit/:email", function (req, res) {
@@ -138,8 +150,8 @@ app.put("/prv/edit/:email", function (req, res) {
     email: req.params.email,
   })
     .then((dataUser) => {
-        dataUser.rdv_date = req.body.rdv_date,
-        dataUser.rdv_heure = req.body.rdv_heure
+      (dataUser.rdv_date = req.body.rdv_date),
+        (dataUser.rdv_heure = req.body.rdv_heure);
       dataUser
         .save()
         .then(() => {
@@ -151,10 +163,9 @@ app.put("/prv/edit/:email", function (req, res) {
     .catch((err) => console.log(err));
 });
 
-
 // const port = 5001;
 const port = process.env.PORT || 5001;
 
 var server = app.listen(port, function () {
-    console.log("Node server is running!!");
+  console.log("Node server is running!!");
 });
